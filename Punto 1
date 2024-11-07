@@ -1,0 +1,98 @@
+package Ejercicios;
+
+import java.util.Random;
+
+public class GestionEstudiantes {
+
+    private static final int NUM_ESTUDIANTES = 6; // Aca podemos cambiar el numero de estudiantes que queremos usar
+    private static int[] codigos = new int[NUM_ESTUDIANTES];
+    private static String[] nombres = {"Ana", "Luis", "Carlos", "María", "Jorge","Jacobo"};//Aqui asignamos los nombres de cada estudiante pa que sea mas ordenado
+    private static double[][] notas = new double[NUM_ESTUDIANTES][4]; // Última columna para la definitiva
+
+    public static void main(String[] args) {
+        generarDatosAleatorios();
+        calcularDefinitivas();
+
+        int codigoABuscar = codigos[0]; // Usar el primer código aleatorio como ejemplo
+        System.out.println("Buscando al estudiante con código: " + codigoABuscar);
+        buscarEstudiantePorCodigo(codigoABuscar);
+
+        System.out.println("\nLista de estudiantes ordenada por definitiva en orden descendente:");
+        mostrarListaOrdenadaPorDefinitiva();
+    }
+
+    // Aca simplemente creamos un for para generar los datos random o aleatorios
+
+    private static void generarDatosAleatorios() {
+        Random random = new Random();
+        for (int i = 0; i < NUM_ESTUDIANTES; i++) {
+            codigos[i] = 100 + random.nextInt(500); // Simplemente ponemos que genere codigos entre 100 y 500
+            notas[i][0] = 2 + random.nextDouble() * 3; // Nota corte 1 entre 2.0 y 5.0
+            notas[i][1] = 2 + random.nextDouble() * 3; // Nota corte 2 entre 2.0 y 5.0
+            notas[i][2] = 2 + random.nextDouble() * 3; // Nota corte 3 entre 2.0 y 5.0
+        }
+    }
+
+    // Aqui se calcula la definitiva para cada estudiante
+
+    private static void calcularDefinitivas() {
+        for (int i = 0; i < NUM_ESTUDIANTES; i++) {
+            double definitiva = notas[i][0] * 0.3 + notas[i][1] * 0.3 + notas[i][2] * 0.3;
+            notas[i][3] = definitiva;
+        }
+    }
+
+    // Aca se busca un estudiante por su código
+
+    private static void buscarEstudiantePorCodigo(int codigo) {
+        for (int i = 0; i < NUM_ESTUDIANTES; i++) {
+            if (codigos[i] == codigo) {
+                System.out.println("Nombre: " + nombres[i]);
+                System.out.println("Notas: Corte 1: " + notas[i][0] + ", Corte 2: " + notas[i][1] + ", Corte 3: " + notas[i][2]);
+                System.out.println("Definitiva: " + notas[i][3]);
+                return;
+            }
+        }
+        System.out.println("Estudiante no encontrado.");
+    }
+
+    // Muestra la lista de estudiantes, ordenándolos de mayor a menor segun la nota.
+
+    private static void mostrarListaOrdenadaPorDefinitiva() {
+
+        // Lo ordenamos con el metodo de la burbuja
+
+        for (int i = 0; i < NUM_ESTUDIANTES - 1; i++) {
+
+            for (int j = 0; j < NUM_ESTUDIANTES - i - 1; j++) {
+
+                if (notas[j][3] < notas[j + 1][3]) {
+
+
+                    // Intercambia definitivas
+                    double[] tempNotas = notas[j];
+                    notas[j] = notas[j + 1];
+                    notas[j + 1] = tempNotas;
+
+                    // Intercambia códigos
+                    int tempCodigo = codigos[j];
+                    codigos[j] = codigos[j + 1];
+                    codigos[j + 1] = tempCodigo;
+
+                    // Intercambia nombres
+                    String tempNombre = nombres[j];
+                    nombres[j] = nombres[j + 1];
+                    nombres[j + 1] = tempNombre;
+                }
+            }
+        }
+
+        // Aqui finalmente ya imprimimos
+        for (int i = 0; i < NUM_ESTUDIANTES; i++) {
+            System.out.println("Código: " + codigos[i] + ", Nombre: " + nombres[i]);
+            System.out.println("Notas: Corte 1: " + notas[i][0] + ", Corte 2: " + notas[i][1] + ", Corte 3: " + notas[i][2]);
+            System.out.println("Definitiva: " + notas[i][3]);
+        }
+    }
+}
+
